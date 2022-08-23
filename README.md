@@ -47,4 +47,4 @@ In preparation for the interview, please consider how you would answer the follo
 - provide shell access into the application stack for operations staff who may want to log into an instance?
 - make access and error logs available in a monitoring service such as AWS CloudWatch or Azure Monitor?
 
-**Credits: ** thanks to @ImperialXT for his work in writing the original version of this task from which this document was sourced.
+**Credits:** thanks to @ImperialXT for his work in writing the original version of this task from which this document was sourced.
