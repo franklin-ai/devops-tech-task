@@ -1,0 +1,6 @@
+# for more info, please see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_access_key
+# base64 encoded pgp public key. if your key is already imported into into your local gpg configuration, you can generate with the command:
+# gpg --export < gpg pub key id > | base64 -w0
+# to decrypt the secret key:
+# terraform output -raw terraform_aws_key_secret | base64 --decode | gpg --decrypt
+gpg_key = "< the base64 encoded pgp key >"
