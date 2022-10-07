@@ -24,6 +24,8 @@ Terraform apply.
 
 Make sure to commit the new terraform.tfstate file to this git repository.
 
+If you no longer need the root AWS keys, delete them.
+
 Both the vpc and ecs terraform spaces will use this new terraform user to apply changes. You will need to retrieve this user's AWS keys which are available here as outputs. To unencrypt the secret key, run `terraform output -raw terraform_aws_key_secret | base64 --decode | gpg --decrypt` (you may need to adjust the command if you are not using a gpg key imported into your host's gpg configuration).
 
 When considering security best practices, usually the terraform user configuration spans multiple AWS accounts. Usually there is an admin designated accout that contains the user while the account that will hold the resources contains the role. For the purposes of this exercise, both the user and role exist in the same AWS account.
