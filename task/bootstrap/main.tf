@@ -72,6 +72,10 @@ resource "aws_iam_access_key" "terraform" {
   pgp_key = var.gpg_key
 }
 
+output "terraform_role_arn" {
+  value = aws_iam_role.terraform.arn
+}
+
 output "terraform_aws_key_id" {
   value = aws_iam_access_key.terraform.id
 }
