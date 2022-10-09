@@ -12,12 +12,13 @@ data "aws_availability_zones" "current" {
 
 # our vpc
 resource "aws_vpc" "self" {
-  cidr_block = var.cidr
+  cidr_block           = var.cidr
+  enable_dns_hostnames = true
+  enable_dns_support   = true
 
   tags = {
-    role   = "vpc"
-    region = data.aws_region.current.name
-    name   = "devops-tech-task"
+    role = "vpc"
+    name = "devops-tech-task"
   }
 }
 
@@ -27,14 +28,13 @@ resource "aws_subnet" "public" {
 
   vpc_id                  = aws_vpc.self.id
   cidr_block              = each.key
-  availability_zone       = local.azs[index(tolist(sort(local.public_subnets)), each.key)]
+  availability_zone       = local.azs[index(sort(tolist(local.public_subnets)), each.key)]
   map_public_ip_on_launch = true
 
   tags = {
-    role   = "vpc"
-    region = data.aws_region.current.name
-    zone   = local.azs[index(tolist(sort(local.public_subnets)), each.key)]
-    name   = "devops-tech-task"
+    role = "vpc"
+    zone = local.azs[index(sort(tolist(local.public_subnets)), each.key)]
+    name = "devops-tech-task"
   }
 }
 
@@ -44,14 +44,13 @@ resource "aws_subnet" "private" {
 
   vpc_id                  = aws_vpc.self.id
   cidr_block              = each.key
-  availability_zone       = local.azs[index(tolist(sort(local.private_subnets)), each.key)]
+  availability_zone       = local.azs[index(sort(tolist(local.private_subnets)), each.key)]
   map_public_ip_on_launch = false
 
   tags = {
-    role   = "vpc"
-    region = data.aws_region.current.name
-    zone   = local.azs[index(tolist(sort(local.private_subnets)), each.key)]
-    name   = "devops-tech-task"
+    role = "vpc"
+    zone = local.azs[index(sort(tolist(local.private_subnets)), each.key)]
+    name = "devops-tech-task"
   }
 }
 
@@ -100,10 +99,9 @@ resource "aws_eip" "private" {
   vpc = true
 
   tags = {
-    role   = "vpc"
-    region = data.aws_region.current.name
-    zone   = local.azs[index(tolist(sort(local.private_subnets)), each.key)]
-    name   = "devops-tech-task"
+    role = "vpc"
+    zone = local.azs[index(sort(tolist(local.private_subnets)), each.key)]
+    name = "devops-tech-task"
   }
 }
 
@@ -111,13 +109,14 @@ resource "aws_nat_gateway" "private" {
   for_each = local.private_subnets
 
   allocation_id = aws_eip.private[each.key].id
-  subnet_id     = aws_subnet.private[each.key].id
+  # to get our public subnet, we get the element of local.public_subnets that matches the index in local.private_subnets corresponding to each.key
+  # this does require local.public_subnets to have a length equal or greater to local.private_subnets
+  subnet_id = aws_subnet.public[element(sort(tolist(local.public_subnets)), index(sort(tolist(local.private_subnets)), each.key))].id
 
   tags = {
-    role   = "vpc"
-    region = data.aws_region.current.name
-    zone   = local.azs[index(tolist(sort(local.private_subnets)), each.key)]
-    name   = "devops-tech-task"
+    role = "vpc"
+    zone = local.azs[index(sort(tolist(local.private_subnets)), each.key)]
+    name = "devops-tech-task"
   }
 
   depends_on = [aws_internet_gateway.public]
@@ -129,10 +128,9 @@ resource "aws_route_table" "private" {
   vpc_id = aws_vpc.self.id
 
   tags = {
-    role   = "vpc"
-    region = data.aws_region.current.name
-    zone   = local.azs[index(tolist(sort(local.private_subnets)), each.key)]
-    name   = "devops-tech-task"
+    role = "vpc"
+    zone = local.azs[index(sort(tolist(local.private_subnets)), each.key)]
+    name = "devops-tech-task"
   }
 }
 

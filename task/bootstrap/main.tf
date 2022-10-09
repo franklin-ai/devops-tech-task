@@ -22,7 +22,7 @@ variable "gpg_key" {
 data "aws_caller_identity" "bootstrap" {}
 
 resource "aws_iam_role" "terraform" {
-  name = "terraform"
+  name = "devops-tech-task-tf-remote-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -34,8 +34,8 @@ resource "aws_iam_role" "terraform" {
   })
 
   tags = {
-    role = "admin"
-    name = "terraform"
+    role = "bootstrap"
+    name = "devops-tech-task"
   }
 }
 
@@ -45,18 +45,18 @@ resource "aws_iam_role_policy_attachment" "admin" {
 }
 
 resource "aws_iam_user" "terraform" {
-  name          = "terraform"
+  name          = "devops-tech-task-tf-user"
   path          = "/system/"
   force_destroy = true
 
   tags = {
-    role = "admin"
-    name = "terraform"
+    role = "bootstrap"
+    name = "devops-tech-task"
   }
 }
 
 resource "aws_iam_user_policy" "terraform_role" {
-  name = "terraform-role"
+  name = "devops-tech-task-tf-role"
   user = aws_iam_user.terraform.name
   policy = jsonencode({
     Version = "2012-10-17",
@@ -70,7 +70,7 @@ resource "aws_iam_user_policy" "terraform_role" {
 }
 
 resource "aws_iam_user_policy" "terraform_remote" {
-  name = "terraform-remote"
+  name = "devops-tech-task-tf-remote"
   user = aws_iam_user.terraform.name
   policy = jsonencode({
     Version = "2012-10-17",
@@ -84,7 +84,7 @@ resource "aws_iam_user_policy" "terraform_remote" {
 }
 
 resource "aws_iam_user_policy" "terraform_lock" {
-  name = "terraform-lock"
+  name = "devops-tech-task-tf-lock"
   user = aws_iam_user.terraform.name
   policy = jsonencode({
     Version = "2012-10-17",
@@ -105,7 +105,8 @@ resource "aws_iam_access_key" "terraform" {
 
 # s3 bucket for dependednt workspaces
 resource "aws_s3_bucket" "terraform" {
-  bucket = "devops-tech-task-tf-backend"
+  bucket        = "devops-tech-task-tf-backend"
+  force_destroy = true
 
   tags = {
     role = "admin"
