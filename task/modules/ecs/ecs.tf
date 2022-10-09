@@ -1,3 +1,6 @@
+# resources needed to enble https access to the hello-world app are commented out below
+# this is because aws charges $400+ to run their certificate authority
+
 data "aws_region" "current" {}
 
 # ecs roles
@@ -114,11 +117,11 @@ resource "aws_ecs_service" "self" {
   }
 
   lifecycle {
-    #ignore_changes = [task_definition, desired_count]
     ignore_changes = [desired_count]
   }
 
-  depends_on = [aws_alb_listener.http, aws_alb_listener.https]
+  #  depends_on = [aws_alb_listener.http, aws_alb_listener.https]
+  depends_on = [aws_alb_listener.http]
 
   tags = {
     role = "ecs"
