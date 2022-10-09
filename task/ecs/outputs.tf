@@ -3,7 +3,7 @@ output "hello_world_hostname" {
   value       = module.ecs.hello_world_hostname
 }
 
-output "acmpca_root_ca" {
-  description = "aws acm pca root ca certificate"
-  value       = module.ecs.acmpca_root_ca
-}
+#output "acmpca_root_ca" {
+#  description = "aws acm pca root ca certificate"
+#  value       = module.ecs.acmpca_root_ca
+#}
