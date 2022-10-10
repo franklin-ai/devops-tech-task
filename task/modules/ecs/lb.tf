@@ -1,4 +1,5 @@
-# resources needed to enble https access to the hello-world app are commented out below
+# resources needed to enble https access to the hello-world app are disabled by default
+# and require the user to enable via the enable_ssl input variable
 # this is because aws charges $400+ to run their certificate authority
 
 data "aws_elb_service_account" "current" {}
@@ -15,13 +16,6 @@ resource "aws_security_group" "alb" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  #    ingress {
-  #    protocol    = "tcp"
-  #    from_port   = 443
-  #    to_port     = 443
-  #    cidr_blocks = ["0.0.0.0/0"]
-  #  }
-
   egress {
     protocol    = "-1"
     from_port   = 0
@@ -33,6 +27,17 @@ resource "aws_security_group" "alb" {
     role = "ecs"
     name = "devops-tech-task"
   }
+}
+
+resource "aws_security_group_rule" "https" {
+  count = var.enable_ssl ? 1 : 0
+
+  security_group_id = aws_security_group.alb.id
+  type              = "ingress"
+  protocol          = "tcp"
+  from_port         = 443
+  to_port           = 443
+  cidr_blocks       = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group" "ecs_tasks" {
@@ -103,9 +108,10 @@ resource "aws_alb_target_group" "self" {
   }
 }
 
-# if you are uncommenting the code to enable https access, comment out this http aws_alb_listenenr
-# and uncomment the http aws_alb_listener below
+# http listener without ssl enabled
 resource "aws_alb_listener" "http" {
+  count = var.enable_ssl ? 0 : 1
+
   load_balancer_arn = aws_lb.self.id
   port              = 80
   protocol          = "HTTP"
@@ -121,44 +127,49 @@ resource "aws_alb_listener" "http" {
   }
 }
 
-#resource "aws_alb_listener" "http" {
-#  load_balancer_arn = aws_lb.self.id
-#  port              = 80
-#  protocol          = "HTTP"
+# http listener with ssl enabled
+resource "aws_alb_listener" "http_redirect" {
+  count = var.enable_ssl ? 1 : 0
 
-#  default_action {
-#    type = "redirect"
+  load_balancer_arn = aws_lb.self.id
+  port              = 80
+  protocol          = "HTTP"
 
-#    redirect {
-#      port        = 443
-#      protocol    = "HTTPS"
-#      status_code = "HTTP_301"
-#    }
-#  }
+  default_action {
+    type = "redirect"
 
-#  tags = {
-#    role = "ecs"
-#    name = "devops-tech-task"
-#  }
-#}
+    redirect {
+      port        = 443
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
 
-#resource "aws_alb_listener" "https" {
-#  load_balancer_arn = aws_lb.self.id
-#  port              = 443
-#  protocol          = "HTTPS"
-#  ssl_policy        = "ELBSecurityPolicy-2016-08"
-#  certificate_arn   = aws_acm_certificate.fake.arn
+  tags = {
+    role = "ecs"
+    name = "devops-tech-task"
+  }
+}
 
-#  default_action {
-#    target_group_arn = aws_alb_target_group.self.id
-#    type             = "forward"
-#  }
+resource "aws_alb_listener" "https" {
+  count = var.enable_ssl ? 1 : 0
 
-#  tags = {
-#    role = "ecs"
-#    name = "devops-tech-task"
-#  }
-#}
+  load_balancer_arn = aws_lb.self.id
+  port              = 443
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn   = aws_acm_certificate.fake[0].arn
+
+  default_action {
+    target_group_arn = aws_alb_target_group.self.id
+    type             = "forward"
+  }
+
+  tags = {
+    role = "ecs"
+    name = "devops-tech-task"
+  }
+}
 
 # alb s3 bucket for logs
 resource "aws_s3_bucket" "alb" {

@@ -32,6 +32,7 @@ provider "aws" {
 module "ecs" {
   source = "../modules/ecs"
 
+  enable_ssl      = false
   private_subnets = data.terraform_remote_state.vpc.outputs.private_subnets
   public_subnets  = data.terraform_remote_state.vpc.outputs.public_subnets
   vpc             = data.terraform_remote_state.vpc.outputs.vpc

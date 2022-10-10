@@ -1,5 +1,10 @@
-# resources needed to enble https access to the hello-world app are commented out below
+# resources needed to enble https access to the hello-world app are disabled by default
+# and require the user to enable via the enable_ssl input variable
 # this is because aws charges $400+ to run their certificate authority
+
+locals {
+  depends = var.enable_ssl ? "\"aws_alb_listener.http_redirect\", \"aws_alb_listener.https\"" : "aws_alb_listener.http"
+}
 
 data "aws_region" "current" {}
 
@@ -98,9 +103,9 @@ resource "aws_ecs_service" "self" {
   name                               = "devops-tech-task-service"
   cluster                            = aws_ecs_cluster.self.id
   task_definition                    = aws_ecs_task_definition.self.arn
-  desired_count                      = 1
-  deployment_minimum_healthy_percent = 100
-  deployment_maximum_percent         = 200
+  desired_count                      = 3
+  deployment_minimum_healthy_percent = 50
+  deployment_maximum_percent         = 100
   launch_type                        = "FARGATE"
   scheduling_strategy                = "REPLICA"
 
@@ -120,8 +125,7 @@ resource "aws_ecs_service" "self" {
     ignore_changes = [desired_count]
   }
 
-  #  depends_on = [aws_alb_listener.http, aws_alb_listener.https]
-  depends_on = [aws_alb_listener.http]
+  depends_on = [local.depends]
 
   tags = {
     role = "ecs"
