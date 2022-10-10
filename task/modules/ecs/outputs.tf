@@ -3,7 +3,7 @@ output "hello_world_hostname" {
   value       = aws_lb.self.dns_name
 }
 
-#output "acmpca_root_ca" {
-#  description = "aws acm pca root ca certificate"
-#  value       = aws_acmpca_certificate_authority.fake.certificate
-#}
+output "acmpca_root_ca" {
+  description = "aws acm pca root ca certificate"
+  value       = var.enable_ssl ? aws_acmpca_certificate_authority.fake[0].certificate : "n/a"
+}
