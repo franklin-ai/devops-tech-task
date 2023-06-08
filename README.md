@@ -6,20 +6,20 @@ This is a technical task for DevOps Engineer roles at [franklin.ai](https://fran
 
 ### Part 1 - Building the Docker image
 
-This repository contains a hello-world-server directory which defines a simple, web server written in Rust. Part 1 of the task is to build the hello-world-server into a Docker image.
+This repository contains a `hello-world-server` directory which defines a simple, web server written in Rust. Part 1 of the task is to build the `hello-world-server` into a Docker image.
 
 You may use a Dockerfile/Docker CLI or any build or CI framework you choose to build the Docker image. The Docker image should meet the following criteria:
 
 - Apply Docker best practices in how you build and add security to the image.
-- The default CMD or ENTRYPOINT of the image should run the hello-world-server binary.
-- Ensure the `hello-world-server/static` directory is copied into the image. The hello-world-server expects to find it at the `./static` relative path.
-- You should not need to edit anything within the hello-world-server directory. Instead you should simply add a Dockerfile or whatever you need to build the Docker image.
+- The default CMD or ENTRYPOINT of the image should run the `hello-world-server` binary.
+- Ensure the `hello-world-server/static` directory is copied into the image. The `hello-world-server` binary expects to find it at the `./static` path relative to itself.
+- You should not need to edit anything within the `hello-world-server` directory. Instead you should simply add a Dockerfile or whatever you need to build the Docker image.
 
-Note that the hello-world-server listens on TCP port 80. This will be relevant for when you run the container in part 2.
+Note that the `hello-world-server` listens on TCP port 80. This will be relevant for when you run the container in part 2.
 
 ### Part 2 - Running the Docker container in AWS
 
-In part 2 you should use [terraform](https://www.terraform.io/) to provision an application stack in a single region of AWS that runs the hello-world-server. While you must use Terraform for provisioning the AWS resources, you may use a script or any build framework you wish to push the hello-world-server Docker image to a repository or object store so that it can be pulled and run by your chosen AWS compute.
+In part 2 you should use [Terraform](https://www.terraform.io/) to provision an application stack in a single region of AWS that runs the `hello-world-server`. While you must use Terraform for provisioning the AWS resources, you may use a script or any build framework you wish to push the `hello-world-server` Docker image to a repository or object store so that it can be pulled and run by your chosen AWS compute.
 
 The Terraform stack should meet the following criteria:
 
