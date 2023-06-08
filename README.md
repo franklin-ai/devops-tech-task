@@ -11,11 +11,19 @@ This repository contains a **hello-world-server** directory which defines a simp
 You may use a Dockerfile/Docker CLI or any build or CI framework you choose to build the Docker image. The Docker image should meet the following criteria:
 
 - Apply Docker best practices in how you build and add security to the image.
-- The default CMD or ENTRYPOINT of the image should run the **hello-world-server** binary.
+- The default CMD or ENTRYPOINT of the image should run the **hello-world-server** binary. 
 - Ensure the `hello-world-server/static` directory is copied into the image. The **hello-world-server** binary expects to find it at the `./static` path relative to itself.
 - You should not need to edit anything within the **hello-world-server** directory. Instead you should simply add a Dockerfile or whatever you need to build the Docker image.
 
 Note that the **hello-world-server** listens on TCP port 80. This will be relevant for when you run the container in part 2.
+
+Also note that you can build the **hello-world-server** binary by running the following command within the `hello-world-server` directory:
+
+```sh
+cargo build --all-features -p hello-world-server --release
+```
+
+The compiled binary will be written to `hello-world-server/target/release/hello-world-server`.
 
 ### Part 2 - Running the Docker container in AWS
 
