@@ -9,12 +9,17 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(|| {
         App::new()
-            // enable logger
-            .wrap(Logger::default())
+            // We allow the visitor to see an index of the images at `/images`.
             .service(Files::new("/images", "static/images/").show_files_listing())
-            .service(Files::new("/", "./static/").index_file("index.html"))
+            // Serve a tree of static files at the web root and specify the index file.
+            // Note that the root path should always be defined as the last item. The paths are
+            // resolved in the order they are defined. If this would be placed before the `/images`
+            // path then the service for the static images would never be reached.
+            .service(Files::new("/", "./static/root/").index_file("index.html"))
+            // Enable the logger.
+            .wrap(Logger::default())
     })
-    .bind(("0.0.0.0", 8080))?
+    .bind(("0.0.0.0", 80))?
     .run()
     .await
 }
