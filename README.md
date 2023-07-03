@@ -47,7 +47,7 @@ You can assume the following about the environment into which your stack will be
 ## Expectations
 
 To complete the task you should take a copy of this repo and publish your solution to your own version of the repository.
-You are welcome to make your repository private as long as it is visible to `@doc-E-brown`, `@cmac-fish`, `@rickfoxcroft`, `@jayvdb` and `@michaelvoet`.
+You are welcome to make your repository private as long as it is visible to `@doc-E-brown`, `@cmac-fish`, `@rickfoxcroft`, `@jayvdb`, `@michaelvoet` and @boods.
 You will not be required to demonstrate an operational version of your solution, however please provide the listed members with access at least 24 hours prior to the scheduled technical interview.
 
 **Please do not spend more than a few hours on this task**
