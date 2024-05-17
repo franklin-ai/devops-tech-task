@@ -11,7 +11,7 @@ This repository contains a **hello-world-server** directory which defines a simp
 You may use a Dockerfile/Docker CLI or any build or CI framework you choose to build the Docker image. The Docker image should meet the following criteria:
 
 - Apply Docker best practices in how you build and add security to the image.
-- The default CMD or ENTRYPOINT of the image should run the **hello-world-server** binary. 
+- The default CMD or ENTRYPOINT of the image should run the **hello-world-server** binary.
 - Ensure the `hello-world-server/static` directory is copied into the image. The **hello-world-server** binary expects to find it at the `./static` path relative to itself.
 - You should not need to edit anything within the **hello-world-server** directory. Instead you should simply add a Dockerfile or whatever you need to build the Docker image.
 
@@ -47,7 +47,7 @@ You can assume the following about the environment into which your stack will be
 ## Expectations
 
 To complete the task you should take a copy of this repo and publish your solution to your own version of the repository.
-You are welcome to make your repository private as long as it is visible to `@doc-E-brown`, `@cmac-fish`, `@rickfoxcroft`, `@jayvdb`, `@michaelvoet` and `@boods`.
+You are welcome to make your repository private as long as it is visible to `@doc-E-brown`, `@cmac-fish`, `@rickfoxcroft`, `@jayvdb`, `@michaelvoet`, `@boods` and `@camerontf-franklinai`.
 You will not be required to demonstrate an operational version of your solution, however please provide the listed members with access at least 24 hours prior to the scheduled technical interview.
 
 **Please do not spend more than a few hours on this task**
